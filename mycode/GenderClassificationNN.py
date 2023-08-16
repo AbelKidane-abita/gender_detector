@@ -30,10 +30,10 @@ class GenderClassificationNN(nn.Module):
         self.fc_layers = nn.Sequential(
             nn.Linear(512 * (image_height // 16) * (image_width // 16), 1024),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            # nn.Dropout(0.5),
             nn.Linear(1024, 512),
             nn.ReLU(),
-            nn.Dropout(0.5),
+            # nn.Dropout(0.5),
             nn.Linear(512, 2)
         )
 

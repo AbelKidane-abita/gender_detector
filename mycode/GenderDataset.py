@@ -4,6 +4,7 @@ import os
 from typing import Tuple, Dict, List
 import pathlib
 from PIL import Image
+import torch
 
 # Make function to find classes in target directory
 def find_classes(directory: str) -> Tuple[List[str], Dict[str, int]]:

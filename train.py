@@ -118,8 +118,8 @@ def main_func():
     ])
 
     # Using custom dataset class
-    train_data = GenderDataset(targ_dir="MainDataset/train",transform=train_transforms)
-    test_data = GenderDataset(targ_dir="MainDataset/test",transform=test_transforms)
+    train_data = GenderDataset(targ_dir="dataset/train",transform=train_transforms)
+    test_data = GenderDataset(targ_dir="dataset/test",transform=test_transforms)
 
     # OR usign the implemented default one (more efficient) -->TRY CUSTOM FIRST
     # train_data = datasets.ImageFolder(root=train_dir, # target folder of images
@@ -132,12 +132,12 @@ def main_func():
 
     #Dataloader
     train_dataloader = DataLoader(dataset=train_data, 
-                                    batch_size=1, 
+                                    batch_size=64, 
                                     num_workers=0, 
                                     shuffle=True) 
 
     test_dataloader = DataLoader(dataset=test_data, 
-                                    batch_size=1, 
+                                    batch_size=64, 
                                     num_workers=0, 
                                     shuffle=False) 
     
@@ -151,13 +151,12 @@ def main_func():
     )
     print(f"Using {device} device")
 
-    # loss function and optimizer
-    loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
-
     #define the model
     model = GenderClassificationNN().to(device)
 
+    # loss function and optimizer
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 
     #training and testing
     # Set random seeds
