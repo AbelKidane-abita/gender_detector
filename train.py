@@ -1,10 +1,10 @@
 import torch
 import os
 from torch import nn
-from code.GenderClassificationNN import GenderClassificationNN
-from code.train_step import train_step
-from code.test_step import test_step
-from code.GenderDataset import GenderDataset
+from mycode.GenderClassificationNN import GenderClassificationNN
+from mycode.train_step import train_step
+from mycode.test_step import test_step
+from mycode.GenderDataset import GenderDataset
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torchvision.transforms import ToTensor
