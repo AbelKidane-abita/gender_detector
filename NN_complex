@@ -1,0 +1,56 @@
+import torch
+import torch.nn as nn
+
+class ComplexGenderClassificationModel(nn.Module):
+    def __init__(self, input_channels, num_classes):
+        super(ComplexGenderClassificationModel, self).__init__()
+
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(input_channels, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            
+            nn.Conv2d(256, 512, kernel_size=3, padding=1),
+            nn.BatchNorm2d(512),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+
+        self.fc_layers = nn.Sequential(
+            nn.Linear(512 * (image_height // 16) * (image_width // 16), 1024),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(1024, 512),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+            nn.Linear(512, num_classes)
+        )
+
+    def forward(self, x):
+        x = self.conv_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc_layers(x)
+        return x
+
+# Example usage
+input_channels = 3  # Number of color channels (e.g., 3 for RGB)
+image_height = 224  # Adjust as needed based on your images
+image_width = 224
+num_classes = 2  # 2 classes: Male and Female
+
+# Instantiate the complex model
+complex_model = ComplexGenderClassificationModel(input_channels, num_classes)
+
+# Print the model architecture
+print(complex_model)
