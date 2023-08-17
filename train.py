@@ -31,7 +31,7 @@ def train(model: torch.nn.Module,
     }
     
     # 3. Loop through training and testing steps for a number of epochs
-    for epoch in tqdm(range(epochs), leave=True, color='green'):
+    for epoch in tqdm(range(epochs), leave=True):
         train_loss, train_acc = train_step(model=model,
                                         dataloader=train_dataloader,
                                         loss_fn=loss_fn,
@@ -97,7 +97,7 @@ def plot_loss_curves(results: Dict[str, List[float]]):
     plt.plot(epochs, test_accuracy, label='test_accuracy')
     plt.title('Accuracy')
     plt.xlabel('Epochs')
-    plt.legend();
+    plt.legend()
     plt.savefig('models/results.png')
 
 def main_func(): 
@@ -105,10 +105,17 @@ def main_func():
     # Augment train data
     train_transforms = transforms.Compose([
         transforms.Resize((128, 128)),
+
+        #--NEW --NOT TESTED YET
+        transforms.ColorJitter(brightness=0.5),
+        transforms.RandomRotation(45),
+        transforms.RandomVerticalFlip(p=0.05),
+        #--NEW
+
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.ToTensor()
     ])
-    # Don't augment test data, only reshape
+    # Don't augment test data, only resize the images
     test_transforms = transforms.Compose([
         transforms.Resize((128, 128)),
         transforms.ToTensor()
@@ -129,7 +136,7 @@ def main_func():
     # test_data = datasets.ImageFolder(root=test_dir, 
     #                             transform=test_transforms)
 
-    BATCH_SIZE = 512
+    BATCH_SIZE = 2660
     #Dataloader
     train_dataloader = DataLoader(dataset=train_data, 
                                     batch_size=BATCH_SIZE, 
@@ -164,7 +171,7 @@ def main_func():
     torch.cuda.manual_seed(42)
 
     # Set number of epochs
-    NUM_EPOCHS = 150
+    NUM_EPOCHS = 50
 
     start_time = timer()
 
@@ -184,8 +191,6 @@ def main_func():
     #save the image
     torch.save(model.state_dict(), "models/model.pth")  #Saving models
     print("Saved PyTorch Model State to models/model.pth")
-
-
 
 if (__name__=='__main__'):
     main_func()

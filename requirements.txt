@@ -3,3 +3,5 @@ opencv-python==4.8.0.76
 numpy==1.24.3
 retina-face==0.0.13
 clearml==1.11.1
+tqdm==4.65.0
+matplotlib==3.7.2

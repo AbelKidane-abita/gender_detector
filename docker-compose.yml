@@ -1,8 +1,10 @@
-verison: '2'
+version: '3.8'
 services:
   genderdetector:
     image: abel_gen
-    command: python -c "import torch;print(tf.torch.cuda.is_available())"
+    command: python3 train.py
+    volumes:
+      - /home/tr-abel/project/gender_detector:/app
     deploy:
       resources:
         reservations:

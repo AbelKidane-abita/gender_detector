@@ -27,7 +27,7 @@ class GenderClassificationNN(nn.Module):
             nn.Conv2d(256, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2)  # every time it passes w and h /2
+            nn.MaxPool2d(kernel_size=2, stride=2),  # every time it passes w and h /2
             nn.Dropout(0.25)
         )
         self.flatten = nn.Flatten()
