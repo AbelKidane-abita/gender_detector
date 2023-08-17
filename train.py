@@ -30,7 +30,7 @@ def train(model: torch.nn.Module,
     }
     
     # 3. Loop through training and testing steps for a number of epochs
-    for epoch in tqdm(range(epochs)):
+    for epoch in tqdm(range(epochs), leave=True, color='green'):
         train_loss, train_acc = train_step(model=model,
                                         dataloader=train_dataloader,
                                         loss_fn=loss_fn,
@@ -45,7 +45,7 @@ def train(model: torch.nn.Module,
             f"train_loss: {train_loss:.4f} | "
             f"train_acc: {train_acc:.4f} | "
             f"test_loss: {test_loss:.4f} | "
-            f"test_acc: {test_acc:.4f}"
+            f"test_acc: {test_acc:.4f}\n"
         )
 
         # 5. Update results dictionary
@@ -100,26 +100,25 @@ def plot_loss_curves(results: Dict[str, List[float]]):
     plt.savefig('models/results.png')
 
 def main_func():
-    #path
-    train_dir = "dataset/train"
-    test_dir  = "dataset/test"
-
-
+    
     # Augment train data
     train_transforms = transforms.Compose([
-        transforms.Resize((256, 256)),
+        transforms.Resize((128, 128)),
         transforms.RandomHorizontalFlip(p=0.5),
         transforms.ToTensor()
     ])
     # Don't augment test data, only reshape
     test_transforms = transforms.Compose([
-        transforms.Resize((256, 256)),
+        transforms.Resize((128, 128)),
         transforms.ToTensor()
     ])
 
+    #path
+    train_dir = "dataset/train"
+    test_dir  = "dataset/test"
     # Using custom dataset class
-    train_data = GenderDataset(targ_dir="dataset/train",transform=train_transforms)
-    test_data = GenderDataset(targ_dir="dataset/test",transform=test_transforms)
+    train_data = GenderDataset(targ_dir=train_dir,transform=train_transforms)
+    test_data = GenderDataset(targ_dir=test_dir,transform=test_transforms)
 
     # OR usign the implemented default one (more efficient) -->TRY CUSTOM FIRST
     # train_data = datasets.ImageFolder(root=train_dir, # target folder of images
@@ -129,16 +128,16 @@ def main_func():
     # test_data = datasets.ImageFolder(root=test_dir, 
     #                             transform=test_transforms)
 
-
+    BATCH_SIZE = 512
     #Dataloader
     train_dataloader = DataLoader(dataset=train_data, 
-                                    batch_size=64, 
+                                    batch_size=BATCH_SIZE, 
                                     num_workers=0, 
                                     shuffle=True) 
 
     test_dataloader = DataLoader(dataset=test_data, 
-                                    batch_size=64, 
-                                    num_workers=0, 
+                                    batch_size=BATCH_SIZE, 
+                                    num_workers=2, 
                                     shuffle=False) 
     
     #Set the device to run
@@ -164,7 +163,7 @@ def main_func():
     torch.cuda.manual_seed(42)
 
     # Set number of epochs
-    NUM_EPOCHS = 5
+    NUM_EPOCHS = 150
 
     start_time = timer()
 
@@ -176,7 +175,7 @@ def main_func():
                         epochs=NUM_EPOCHS
                     )
     end_time = timer()
-    print(f"Total training time: {end_time-start_time:.3f} seconds")
+    print(f"\nTotal training time: {end_time-start_time:.3f} seconds")
 
     # plot the results 
     plot_loss_curves(model_results)

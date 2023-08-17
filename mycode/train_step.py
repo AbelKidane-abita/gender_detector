@@ -1,4 +1,5 @@
 import torch
+from tqdm import tqdm
 def train_step(model: torch.nn.Module, 
             dataloader: torch.utils.data.DataLoader, 
             loss_fn: torch.nn.Module, 
@@ -16,9 +17,10 @@ def train_step(model: torch.nn.Module,
     
     # Setup train loss and train accuracy values
     train_loss, train_acc = 0, 0
-    
+    dataloader_with_progress = tqdm(dataloader, total=len(dataloader), leave=True)
     # Loop through data loader data batches
-    for batch, (X, y) in enumerate(dataloader):
+    # for batch, (X, y) in enumerate(dataloader):
+    for batch, (X, y) in enumerate(dataloader_with_progress):
         # Send data to target device
         X, y = X.to(device), y.to(device)
 
@@ -41,8 +43,9 @@ def train_step(model: torch.nn.Module,
         # Calculate and accumulate accuracy metric across all batches
         y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
         train_acc += (y_pred_class == y).sum().item()/len(y_pred)
-
+        dataloader_with_progress.set_description(f"Processing batch {batch+1}/{len(dataloader)}")
     # Adjust metrics to get average loss and accuracy per batch 
     train_loss = train_loss / len(dataloader)
     train_acc = train_acc / len(dataloader)
+    dataloader_with_progress.close()
     return train_loss, train_acc

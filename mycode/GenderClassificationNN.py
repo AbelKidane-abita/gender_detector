@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 class GenderClassificationNN(nn.Module):
-    def __init__(self, input_channels=3, image_height = 256, image_width = 256):
+    def __init__(self, input_channels=3, image_height = 128, image_width = 128):
         super().__init__()
         self.conv_layers = nn.Sequential(
             nn.Conv2d(input_channels, 64, kernel_size=3, padding=1),
@@ -30,10 +30,10 @@ class GenderClassificationNN(nn.Module):
         self.fc_layers = nn.Sequential(
             nn.Linear(512 * (image_height // 16) * (image_width // 16), 1024),
             nn.ReLU(),
-            # nn.Dropout(0.5),
+            nn.Dropout(0.5),
             nn.Linear(1024, 512),
             nn.ReLU(),
-            # nn.Dropout(0.5),
+            nn.Dropout(0.5),
             nn.Linear(512, 2)
         )
 
