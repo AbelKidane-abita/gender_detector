@@ -14,6 +14,7 @@ from torchvision import datasets
 from tqdm.auto import tqdm
 from timeit import default_timer as timer 
 import matplotlib.pyplot as plt
+import clearml
 
 def train(model: torch.nn.Module, 
         train_dataloader: torch.utils.data.DataLoader, 
@@ -99,8 +100,8 @@ def plot_loss_curves(results: Dict[str, List[float]]):
     plt.legend();
     plt.savefig('models/results.png')
 
-def main_func():
-    
+def main_func(): 
+    clearml.browser_login()
     # Augment train data
     train_transforms = transforms.Compose([
         transforms.Resize((128, 128)),
@@ -159,7 +160,7 @@ def main_func():
 
     #training and testing
     # Set random seeds
-    torch.manual_seed(42) 
+    torch.manual_seed(42)
     torch.cuda.manual_seed(42)
 
     # Set number of epochs

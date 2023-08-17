@@ -2,3 +2,4 @@ numpy==1.24.3
 opencv-python==4.8.0.76
 numpy==1.24.3
 retina-face==0.0.13
+clearml==1.11.1
