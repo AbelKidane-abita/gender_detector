@@ -1,0 +1,13 @@
+verison: '2'
+services:
+  genderdetector:
+    image: abel_gen
+    command: python -c "import torch;print(tf.torch.cuda.is_available())"
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['1']
+            capabilities: [gpu]
+
