@@ -136,7 +136,7 @@ def main_func():
     # test_data = datasets.ImageFolder(root=test_dir, 
     #                             transform=test_transforms)
 
-    BATCH_SIZE = 2660
+    BATCH_SIZE = 2048
     #Dataloader
     train_dataloader = DataLoader(dataset=train_data, 
                                     batch_size=BATCH_SIZE, 
