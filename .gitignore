@@ -5,7 +5,9 @@ __pycache__/
 
 #folders
 dataset/
+dataset_all/
 models/
+NLPWithPytorch/
 
 # C extensions
 *.so
